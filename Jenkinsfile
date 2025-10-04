@@ -2,6 +2,7 @@ pipeline {
     agent any
     
     environment {
+        RREGISTRY = 'Dockerhub'
         IMAGE_NAME = 'web-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -14,31 +15,14 @@ pipeline {
             }
         }
 
-        stage('Check thu') {
-            steps {
-                sh "pwd"
-                sh "ls -l"
-            }
-        }
-
-        stage('Debug before build') {
-            steps {
-                sh '''
-                    echo "📂 Current dir: $(pwd)"
-                    ls -l
-                '''
-            }
-        }
-
-        stage('Build Docker Image') {
+        stage('Build & Push') {
             steps {
                 script {
-                    sh """
-                        cd ${WORKSPACE}
-                        ls -l
-                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
-                        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
-                    """
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                        def app = docker.build("${REGISTRY}/${IMAGE}:${BUILD_NUMBER}")
+                        app.push()
+                        app.push("${IMAGE_TAG}")
+                    }
                 }
             }
         }
