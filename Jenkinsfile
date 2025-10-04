@@ -35,6 +35,7 @@ pipeline {
                 script {
                     sh """
                         cd ${WORKSPACE}
+                        ls -l
                         docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
                         docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
                     """
@@ -42,25 +43,9 @@ pipeline {
             }
         }
 
-        stage('Deploy to K8s') {
-            steps {
-                script {
-                    sh """
-                        kubectl set image deployment/web-app web-app=${IMAGE_NAME}:${IMAGE_TAG} || \
-                        kubectl create deployment web-app --image=${IMAGE_NAME}:${IMAGE_TAG} --replicas=3
-                        
-                        kubectl expose deployment web-app --type=NodePort --port=80 || true
-                        kubectl rollout status deployment/web-app
-                    """
-                }
-            }
-        }
-    }
-    
     post {
         success {
-            echo "✅ Deploy thành công!"
-            sh "kubectl get pods -l app=web-app"
+            echo "thành công!"
         }
         failure {
             echo "❌ Deploy thất bại!"
