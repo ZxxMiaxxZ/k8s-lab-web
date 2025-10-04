@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        RREGISTRY = 'Dockerhub'
+        RREGISTRY = 'duym63094@gmail.com'
         IMAGE_NAME = 'web-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
@@ -18,7 +18,7 @@ pipeline {
         stage('Build & Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') {
+                    docker.withRegistry('https://index.docker.io/v1/', 'Dockerhub') {
                         def app = docker.build("${REGISTRY}/${IMAGE}:${BUILD_NUMBER}")
                         app.push()
                         app.push("${IMAGE_TAG}")
