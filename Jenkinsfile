@@ -13,6 +13,12 @@ pipeline {
                 echo "Code đã được pull từ Git"
             }
         }
+        stage('Check thu') {
+            step {
+                sh "pwd"
+                sh "ls"
+            }
+        }
         
         stage('Build Docker Image') {
             steps {
