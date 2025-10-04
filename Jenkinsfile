@@ -31,11 +31,17 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t ${IMAGE_NAME}:${IMAGE_TAG} ."
+                    sh '''
+                        docker build \
+                        -f /var/lib/jenkins/workspace/${JOB_NAME}/Dockerfile \
+                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
+                        /var/lib/jenkins/workspace/${JOB_NAME}
+                    '''
                     sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
                 }
             }
         }
+
 
 
         
