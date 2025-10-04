@@ -42,7 +42,7 @@ pipeline {
                 }
             }
         }
-
+    }
     post {
         success {
             echo "thành công!"
