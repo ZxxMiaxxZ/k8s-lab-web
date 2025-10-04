@@ -14,7 +14,7 @@ pipeline {
             }
         }
         stage('Check thu') {
-            step {
+            steps {
                 sh "pwd"
                 sh "ls"
             }
