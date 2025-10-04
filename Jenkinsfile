@@ -10,41 +10,38 @@ pipeline {
         stage('Checkout') {
             steps {
                 checkout scm
-                echo "Code đã được pull từ Git"
+                echo "✅ Code đã được pull từ Git"
             }
         }
+
         stage('Check thu') {
             steps {
                 sh "pwd"
-                sh "ls"
+                sh "ls -l"
             }
         }
+
         stage('Debug before build') {
             steps {
                 sh '''
-                echo "Current dir: $(pwd)"
-                ls -l
-            '''
+                    echo "📂 Current dir: $(pwd)"
+                    ls -l
+                '''
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh '''
-                        docker build \
-                        -f /var/lib/jenkins/workspace/${JOB_NAME}/Dockerfile \
-                        -t ${IMAGE_NAME}:${IMAGE_TAG} \
-                        /var/lib/jenkins/workspace/${JOB_NAME}
-                    '''
-                    sh "docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest"
+                    sh """
+                        cd ${WORKSPACE}
+                        docker build -t ${IMAGE_NAME}:${IMAGE_TAG} .
+                        docker tag ${IMAGE_NAME}:${IMAGE_TAG} ${IMAGE_NAME}:latest
+                    """
                 }
             }
         }
 
-
-
-        
         stage('Deploy to K8s') {
             steps {
                 script {
