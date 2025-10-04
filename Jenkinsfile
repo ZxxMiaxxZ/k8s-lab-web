@@ -2,7 +2,7 @@ pipeline {
     agent any
     
     environment {
-        RREGISTRY = 'duym63094@gmail.com'
+        REGISTRY = 'duym63094@gmail.com'
         IMAGE_NAME = 'web-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
