@@ -2,8 +2,8 @@ pipeline {
     agent any
     
     environment {
-        REGISTRY = 'duym63094@gmail.com'
-        IMAGE_NAME = 'web-app'
+        REGISTRY = 'manhduynguyen'        // username DockerHub, KHÔNG phải email
+        IMAGE = 'web-app'
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
     
@@ -18,10 +18,10 @@ pipeline {
         stage('Build & Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'Dockerhub') {
-                        def app = docker.build("${REGISTRY}/${IMAGE}:${BUILD_NUMBER}")
-                        app.push()
-                        app.push("${IMAGE_TAG}")
+                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') { 
+                        def app = docker.build("${REGISTRY}/${IMAGE}:${IMAGE_TAG}")
+                        app.push()         // push theo build number
+                        app.push("latest") // push thêm latest
                     }
                 }
             }
@@ -29,7 +29,7 @@ pipeline {
     }
     post {
         success {
-            echo "thành công!"
+            echo "✅ Build & Push thành công!"
         }
         failure {
             echo "❌ Deploy thất bại!"
