@@ -28,6 +28,15 @@ pipeline {
                 }
             }
         }
+        stage('Debug before build') {
+            steps {
+                sh """
+                    echo "Current dir: $(pwd)"
+                    ls -l
+                """
+            }
+        }
+
         
         stage('Deploy to K8s') {
             steps {
