@@ -18,7 +18,7 @@ pipeline {
         stage('Build & Push') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', 'dockerhub') { 
+                    docker.withRegistry('https://registry.hub.docker.com', 'Dockerhub') { 
                         def app = docker.build("${REGISTRY}/${IMAGE}:${IMAGE_TAG}")
                         app.push()         // push theo build number
                         app.push("latest") // push thêm latest
