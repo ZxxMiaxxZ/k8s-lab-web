@@ -2,10 +2,13 @@ apiVersion: v1
 kind: Service
 metadata:
   name: web-app-service
+  namespace: test
 spec:
+  type: NodePort  # ⬅️ ĐỔI từ LoadBalancer sang NodePort
   selector:
-    app: web-app  # Tìm tất cả pods có label này
+    app: web-app
   ports:
-  - port: 80           # Port external (client kết nối vào)
-    targetPort: 8080   # Port bên trong container
-  type: LoadBalancer   # Loại service
+  - protocol: TCP
+    port: 80        # Port của service
+    targetPort: 80  # ⬅️ ĐỔI từ 8080 sang 80 (port nginx)
+    # nodePort: 30080  # Không bắt buộc, K8s sẽ tự chọn trong range 30000-32767
