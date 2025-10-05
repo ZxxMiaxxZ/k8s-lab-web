@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-app-service
+spec:
+  selector:
+    app: web-app  # Tìm tất cả pods có label này
+  ports:
+  - port: 80           # Port external (client kết nối vào)
+    targetPort: 8080   # Port bên trong container
+  type: LoadBalancer   # Loại service
