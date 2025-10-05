@@ -52,18 +52,16 @@ pipeline {
             steps {
                 script {
                     echo "☸️  Deploying to Kubernetes..."
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
-                            # Apply Service trước (nếu chưa có)
-                            kubectl --kubeconfig=\$KUBECONFIG apply -f k8s/service.yaml -n ${K8S_NAMESPACE}
-                            
-                            # Apply Deployment
-                            kubectl --kubeconfig=\$KUBECONFIG apply -f k8s/deployment.yaml -n ${K8S_NAMESPACE}
-                            
-                            # Đợi deployment hoàn thành
-                            kubectl --kubeconfig=\$KUBECONFIG rollout status deployment/web-app -n ${K8S_NAMESPACE} --timeout=5m
-                        """
-                    }
+                    sh """
+                        # Apply Service trước (nếu chưa có)
+                        kubectl apply -f k8s/service.yaml -n ${K8S_NAMESPACE}
+                        
+                        # Apply Deployment
+                        kubectl apply -f k8s/deployment.yaml -n ${K8S_NAMESPACE}
+                        
+                        # Đợi deployment hoàn thành
+                        kubectl rollout status deployment/web-app -n ${K8S_NAMESPACE} --timeout=5m
+                    """
                     echo "✅ Deploy thành công!"
                 }
             }
@@ -73,16 +71,14 @@ pipeline {
             steps {
                 script {
                     echo "🔍 Checking deployment status..."
-                    withCredentials([file(credentialsId: 'kubeconfig', variable: 'KUBECONFIG')]) {
-                        sh """
-                            echo "=== PODS ==="
-                            kubectl --kubeconfig=\$KUBECONFIG get pods -l app=web-app -n ${K8S_NAMESPACE}
-                            
-                            echo ""
-                            echo "=== SERVICE ==="
-                            kubectl --kubeconfig=\$KUBECONFIG get svc web-app-service -n ${K8S_NAMESPACE}
-                        """
-                    }
+                    sh """
+                        echo "=== PODS ==="
+                        kubectl get pods -l app=web-app -n ${K8S_NAMESPACE}
+                        
+                        echo ""
+                        echo "=== SERVICE ==="
+                        kubectl get svc web-app-service -n ${K8S_NAMESPACE}
+                    """
                 }
             }
         }
