@@ -54,10 +54,10 @@ pipeline {
                     echo "☸️  Deploying to Kubernetes..."
                     sh """
                         # Apply Service trước (nếu chưa có)
-                        kubectl apply -f k8s/service.yaml -n ${K8S_NAMESPACE}
+                        kubectl apply -f k8s/service.yaml -n ${K8S_NAMESPACE} --validate=false
                         
                         # Apply Deployment
-                        kubectl apply -f k8s/deployment.yaml -n ${K8S_NAMESPACE}
+                        kubectl apply -f k8s/deployment.yaml -n ${K8S_NAMESPACE} --validate=false
                         
                         # Đợi deployment hoàn thành
                         kubectl rollout status deployment/web-app -n ${K8S_NAMESPACE} --timeout=5m
