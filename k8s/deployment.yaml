@@ -2,10 +2,9 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-app
-  labels:
-    app: web-app
+  namespace: test
 spec:
-  replicas: 3  # Chạy 3 pods
+  replicas: 3
   selector:
     matchLabels:
       app: web-app
@@ -16,26 +15,13 @@ spec:
     spec:
       containers:
       - name: web-app
-        image: manhduynguyen/web-app:latest  # Image từ Docker Hub
+        image: manhduynguyen/web-app:latest
         ports:
-        - containerPort: 8080
+        - containerPort: 80  # Nginx chạy port 80
         resources:
           limits:
-            memory: "512Mi"
-            cpu: "500m"
-          requests:
             memory: "256Mi"
-            cpu: "250m"
-        # Health checks
-        livenessProbe:
-          httpGet:
-            path: /health
-            port: 8080
-          initialDelaySeconds: 30
-          periodSeconds: 10
-        readinessProbe:
-          httpGet:
-            path: /ready
-            port: 8080
-          initialDelaySeconds: 5
-          periodSeconds: 5
+            cpu: "200m"
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
