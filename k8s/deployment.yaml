@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: web-app
-  namespace: test
+  namespace: appsec
 spec:
   replicas: 3
   selector:
@@ -25,3 +25,4 @@ spec:
           requests:
             memory: "128Mi"
             cpu: "100m"
+
